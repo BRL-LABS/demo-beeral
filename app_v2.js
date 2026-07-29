@@ -1,3 +1,5 @@
+const urlParams = new URLSearchParams(window.location.search);
+const userPhone = urlParams.get('phone');
 const BASEROW_URL = 'https://brl-labs-baserow.oiwlwu.easypanel.host';
 const TOKEN = 'Token Ru9AdAvFvzN2RwTakZcQ8N80lyTVC0cp';
 const TABLE_PRODUCTOS = 746;
