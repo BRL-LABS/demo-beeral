@@ -4,6 +4,7 @@ const BASEROW_URL = 'https://brl-labs-baserow.oiwlwu.easypanel.host';
 const TOKEN = 'Token Ru9AdAvFvzN2RwTakZcQ8N80lyTVC0cp';
 const TABLE_PRODUCTOS = 746;
 const TABLE_COMANDAS = 747;
+const TABLE_CONVERSACIONES = 748;
 
 const headers = { 'Authorization': TOKEN, 'Content-Type': 'application/json' };
 
@@ -191,7 +192,7 @@ async function confirmOrder() {
     items: state.carrito.map(i => ({ nombre: i.nombre, precio: i.precio, cantidad: i.cantidad }))
   };
 
-  const body = {
+  const bodyComanda = {
     'Id pedido': Date.now(),
     Total: getTotal(),
     Items: JSON.stringify(itemsData),
@@ -199,7 +200,30 @@ async function confirmOrder() {
   };
 
   try {
-    await apiPost(TABLE_COMANDAS, body);
+    // 1. Guardamos el pedido en la tabla de Comandas (747) para la cocina
+    await apiPost(TABLE_COMANDAS, bodyComanda);
+
+    // 2. Buscamos al usuario en la tabla de Conversaciones (748) por su teléfono
+    try {
+      const searchUrl = `${BASEROW_URL}/api/database/rows/table/${TABLE_CONVERSACIONES}/?user_field_names=true&search=${state.telefono}`;
+      const searchRes = await fetch(searchUrl, { headers });
+      const searchData = await searchRes.json();
+      
+      if (searchData.results && searchData.results.length > 0) {
+        const rowId = searchData.results[0].id;
+        
+        // 3. Actualizamos su estado a "comprando" y guardamos el carrito en su fila de conversaciones
+        await apiPatch(TABLE_CONVERSACIONES, rowId, {
+          estado: "comprando",
+          carrito: JSON.stringify(itemsData.items)
+        });
+        
+        console.log("Conversación actualizada a estado: comprando");
+      }
+    } catch (err) {
+      console.warn("El pedido se guardó en comandas, pero hubo un detalle al actualizar conversaciones:", err);
+    }
+
     state.carrito = [];
     updateCartUI();
     closeCart();
@@ -213,7 +237,6 @@ async function confirmOrder() {
     btn.disabled = false;
   }
 }
-
 async function loadComandas() {
   try {
     state.comandas = await apiGet(TABLE_COMANDAS);
