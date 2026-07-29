@@ -200,28 +200,25 @@ async function confirmOrder() {
   };
 
   try {
-    // 1. Guardamos el pedido en la tabla de Comandas (747) para la cocina
+    // 1. Guardamos el pedido en la tabla de Comandas (747)
     await apiPost(TABLE_COMANDAS, bodyComanda);
 
     // 2. Buscamos al usuario en la tabla de Conversaciones (748) por su teléfono
     try {
-      const searchUrl = `${BASEROW_URL}/api/database/rows/table/${TABLE_CONVERSACIONES}/?user_field_names=true&search=${state.telefono}`;
+      const searchUrl = `${BASEROW_URL}/api/database/rows/table/${TABLE_CONVERSACIONES}/?user_field_names=test&search=${state.telefono}`;
       const searchRes = await fetch(searchUrl, { headers });
       const searchData = await searchRes.json();
       
       if (searchData.results && searchData.results.length > 0) {
         const rowId = searchData.results[0].id;
         
-        // 3. Actualizamos su estado a "comprando" y guardamos el carrito en su fila de conversaciones
+        // 3. Actualizamos únicamente el estado a "comprando" (texto plano)
         await apiPatch(TABLE_CONVERSACIONES, rowId, {
-          estado: "comprando",
-          carrito: JSON.stringify(itemsData.items)
+          estado: "comprando"
         });
-        
-        console.log("Conversación actualizada a estado: comprando");
       }
     } catch (err) {
-      console.warn("El pedido se guardó en comandas, pero hubo un detalle al actualizar conversaciones:", err);
+      console.warn("Detalle menor al actualizar estado:", err);
     }
 
     state.carrito = [];
