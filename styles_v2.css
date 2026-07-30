@@ -1,28 +1,106 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+/* ============================================================
+   BEERAL — styles_v2.css
+   Rediseño UI/UX — Modern SaaS / Dark App
+   Estilo: Vercel · Linear · Supabase
+   Tipografía: Plus Jakarta Sans (Google Fonts)
+   Paleta: Dark Mode #0B0F17 + Acento Violeta #6366F1
+   ============================================================ */
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+/* ── 1. IMPORTS & DESIGN TOKENS ──────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+
+:root {
+  /* Background layers */
+  --bg-base:        #0B0F17;
+  --bg-surface:     #111827;
+  --bg-elevated:    #1A2234;
+  --bg-card:        #141B2D;
+  --bg-hover:       #1E2940;
+  --bg-overlay:     rgba(11, 15, 23, 0.85);
+
+  /* Borders */
+  --border-subtle:  rgba(255, 255, 255, 0.07);
+  --border-default: rgba(255, 255, 255, 0.10);
+  --border-strong:  rgba(255, 255, 255, 0.18);
+
+  /* Text */
+  --text-primary:   #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-muted:     #475569;
+  --text-disabled:  #334155;
+
+  /* Accent — Indigo Electrico */
+  --accent:         #6366F1;
+  --accent-hover:   #4F46E5;
+  --accent-soft:    rgba(99, 102, 241, 0.15);
+  --accent-glow:    rgba(99, 102, 241, 0.35);
+
+  /* Semantic colors */
+  --success:        #10B981;
+  --success-soft:   rgba(16, 185, 129, 0.15);
+  --warning:        #F59E0B;
+  --warning-soft:   rgba(245, 158, 11, 0.15);
+  --danger:         #EF4444;
+  --danger-soft:    rgba(239, 68, 68, 0.15);
+  --info:           #3B82F6;
+  --info-soft:      rgba(59, 130, 246, 0.15);
+
+  /* Shadows */
+  --shadow-sm:      0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md:      0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-lg:      0 12px 40px rgba(0, 0, 0, 0.6);
+  --shadow-accent:  0 8px 32px rgba(99, 102, 241, 0.35);
+  --shadow-fab:     0 8px 32px rgba(0, 0, 0, 0.55);
+
+  /* Radii */
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   16px;
+  --radius-xl:   20px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --ease-spring:  cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth:  cubic-bezier(0.4, 0, 0.2, 1);
+  --t-fast:       0.15s;
+  --t-base:       0.25s;
+  --t-slow:       0.4s;
+
+  /* Typography */
+  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* ── 2. RESET & BASE ─────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #F9FAFB;
-  color: #111827;
+  font-family: var(--font-body);
+  background: var(--bg-base);
+  color: var(--text-primary);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.08) 0%, transparent 60%);
+}
+
+/* ── 3. HIDDEN ELEMENTS ──────────────────────────────────── */
+.browser-bar {
+  display: none !important;
 }
 
 .watermark {
-  display: none;
-}
-
-.app-container {
-  max-width: 1000px;
-  margin: 0 auto;
-  min-height: 100vh;
-  background: #F9FAFB;
-}
-
-.browser-bar {
   display: none !important;
 }
 
@@ -30,124 +108,316 @@ body {
   display: none;
 }
 
+/* ── 4. SCROLLBAR GLOBAL ─────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: var(--radius-full); }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+* { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
+
+/* ── 5. APP CONTAINER ────────────────────────────────────── */
+.app-container {
+  max-width: 960px;
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* ── 6. TOP NAV — GLASSMORPHISM FLOATING ─────────────────── */
 .top-nav {
-  background: rgba(255,255,255,0.72);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(0,0,0,0.06);
-  padding: 0.75rem 1rem;
   position: sticky;
   top: 0;
   z-index: 100;
+  padding: 0.875rem 1.25rem;
+  background: rgba(11, 15, 23, 0.7);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--border-subtle);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 1px 0 rgba(0, 0, 0, 0.4),
+    0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
 .nav-inner {
-  max-width: 900px;
+  max-width: 280px;
   margin: 0 auto;
   display: flex;
-  gap: 0.125rem;
-  background: rgba(0,0,0,0.04);
-  border-radius: 12px;
-  padding: 0.1875rem;
+  gap: 3px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  padding: 3px;
 }
 
 .tab-btn {
   flex: 1;
   background: transparent;
-  color: #6B7280;
+  color: var(--text-muted);
   border: none;
-  padding: 0.55rem 0.5rem;
-  border-radius: 10px;
+  padding: 0.45rem 1.25rem;
+  border-radius: var(--radius-full);
   cursor: pointer;
   font-size: 0.8125rem;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  font-family: 'Inter', sans-serif;
-}
-
-.tab-btn.active {
-  background: #FFFFFF;
-  color: #111827;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
   font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: color var(--t-base) var(--ease-smooth), background var(--t-base) var(--ease-smooth), box-shadow var(--t-base) var(--ease-smooth);
+  font-family: var(--font-body);
+  white-space: nowrap;
 }
 
 .tab-btn:hover:not(.active) {
-  color: #374151;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.tab-btn.active {
+  background: var(--accent);
+  color: #FFFFFF;
+  box-shadow: 0 2px 12px rgba(99, 102, 241, 0.45);
+  font-weight: 700;
+}
+
+/* ── 7. MAIN VIEWS ───────────────────────────────────────── */
+main {
+  padding: 0 1.25rem;
 }
 
 .view {
   display: none;
   max-width: 900px;
   margin: 0 auto;
-  padding: 0 1rem 6rem;
+  padding-bottom: 7rem;
 }
 
-.view.active { display: block; }
+.view.active {
+  display: block;
+  animation: fadeIn var(--t-base) var(--ease-smooth);
+}
 
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── 8. HERO SECTION — ANIMATED FOOD BANNER ─────────────── */
 .hero-section {
-  text-align: center;
-  padding: 3rem 0 1.5rem;
+  position: relative;
+  height: 440px;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  margin-bottom: 2rem;
+  /* Flex: text anchored at bottom */
+  display: flex;
+  align-items: flex-end;
+  text-align: left;
+  padding: 0;
+  /* Fallback while images load */
+  background: var(--bg-elevated);
 }
 
+/* ── Slideshow image layer (Ken Burns + crossfade) ─────── */
+.hero-section::before {
+  content: '';
+  position: absolute;
+  inset: -6%;  /* extra room so Ken Burns never reveals edges */
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  animation: heroSlideshow 30s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/* ── Dark gradient overlay + brand tint ───────────────── */
+.hero-section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(to top,
+      rgba(11, 15, 23, 0.97) 0%,
+      rgba(11, 15, 23, 0.72) 35%,
+      rgba(11, 15, 23, 0.22) 65%,
+      transparent 100%),
+    linear-gradient(135deg,
+      rgba(99, 102, 241, 0.18) 0%,
+      transparent 55%);
+}
+
+/* ── Floating badge — top-left ────────────────────────── */
 .hero-badge {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  z-index: 3;
+  margin-bottom: 0;
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: #6B7280;
-  background: rgba(0,0,0,0.03);
-  border: 1px solid rgba(0,0,0,0.06);
-  padding: 0.3rem 1rem;
-  border-radius: 20px;
-  margin-bottom: 1.5rem;
+  gap: 0.375rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(11, 15, 23, 0.72);
+  border: 1px solid rgba(99, 102, 241, 0.38);
+  padding: 0.35rem 0.9rem;
+  border-radius: var(--radius-full);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: badgePulse 3s ease-in-out infinite;
 }
 
+@keyframes badgePulse {
+  0%, 100% { border-color: rgba(99, 102, 241, 0.38); box-shadow: none; }
+  50%      { border-color: rgba(99, 102, 241, 0.75); box-shadow: 0 0 14px rgba(99, 102, 241, 0.25); }
+}
+
+/* ── Brand logo mark — top-right ─────────────────────── */
 .hero-logo {
-  width: 64px;
-  height: 64px;
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  z-index: 3;
+  width: 52px;
+  height: 52px;
+  margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 1rem;
+  background: rgba(11, 15, 23, 0.72);
+  border: 1px solid rgba(99, 102, 241, 0.28);
+  border-radius: var(--radius-lg);
+  box-shadow: none;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: box-shadow var(--t-slow) var(--ease-smooth);
+}
+
+.hero-logo:hover {
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15), 0 0 24px rgba(99, 102, 241, 0.28);
 }
 
 .hero-logo svg circle,
 .hero-logo svg path {
-  transition: stroke 0.3s ease, fill 0.3s ease;
+  transition: stroke var(--t-slow) var(--ease-smooth), fill var(--t-slow) var(--ease-smooth);
 }
-
 .hero-logo svg circle[stroke="#c4a882"],
-.hero-logo svg path[stroke="#c4a882"] {
-  stroke: #111827;
-}
+.hero-logo svg path[stroke="#c4a882"] { stroke: #6366F1; }
+.hero-logo svg path[fill="#c4a882"]   { fill: #6366F1; }
 
-.hero-logo svg path[fill="#c4a882"] {
-  fill: #111827;
+/* ── Text overlay — anchored at bottom ───────────────── */
+.hero-content {
+  position: relative;
+  z-index: 3;
+  padding: 0 1.75rem 1.75rem;
+  width: 100%;
 }
 
 .hero-content h1 {
-  font-family: 'Inter', sans-serif;
-  font-size: 2.5rem;
+  font-family: var(--font-body);
+  font-size: 3.25rem;
   font-weight: 800;
   margin-bottom: 0.4rem;
-  color: #111827;
-  letter-spacing: -0.03em;
-  line-height: 1.15;
+  letter-spacing: -0.045em;
+  line-height: 1.04;
+  background: linear-gradient(135deg, #FFFFFF 0%, #E0E7FF 40%, #A5B4FC 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .hero-content p {
   font-size: 0.9375rem;
-  color: #9CA3AF;
-  font-weight: 400;
+  color: rgba(241, 245, 249, 0.65);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
 }
 
+/* ── Animated slideshow dot indicators ───────────────── */
+/* Element = dot 1; box-shadows = dots 2-5             */
+.hero-content p::after {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: heroDots 30s linear infinite;
+}
+
+/* ══════════════════════════════════════════════════════
+   KEYFRAMES: FOOD SLIDESHOW WITH KEN BURNS
+   5 images × ~20% each. background-image switches
+   while opacity = 0 (invisible), so no hard flash.
+   ══════════════════════════════════════════════════════ */
+@keyframes heroSlideshow {
+
+  /* ▸ IMAGE 1 — Pizza Peperoni */
+  0%   { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Pizza-peperoni.png');
+         opacity: 1;  transform: scale(1.00) translate(0%,    0%);   }
+  16%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Pizza-peperoni.png');
+         opacity: 1;  transform: scale(1.08) translate(-1.5%, -0.5%); }
+  18%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Pizza-peperoni.png');
+         opacity: 0;  transform: scale(1.08) translate(-1.5%, -0.5%); }
+  /* switch while invisible */
+  19%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Tacos-al-pastor.png');
+         opacity: 0;  transform: scale(1.00) translate(0%,    0%);   }
+
+  /* ▸ IMAGE 2 — Tacos al Pastor */
+  20%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Tacos-al-pastor.png');
+         opacity: 1;  transform: scale(1.00) translate(0%,    0%);   }
+  36%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Tacos-al-pastor.png');
+         opacity: 1;  transform: scale(1.07) translate(1.5%,  -1%);  }
+  38%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Tacos-al-pastor.png');
+         opacity: 0;  transform: scale(1.07) translate(1.5%,  -1%);  }
+  39%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Hamburguesa-clasica.png');
+         opacity: 0;  transform: scale(1.00) translate(0%,    0%);   }
+
+  /* ▸ IMAGE 3 — Hamburguesa Clásica */
+  40%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Hamburguesa-clasica.png');
+         opacity: 1;  transform: scale(1.00) translate(0%,    0%);   }
+  56%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Hamburguesa-clasica.png');
+         opacity: 1;  transform: scale(1.08) translate(-1%,   1%);   }
+  58%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Hamburguesa-clasica.png');
+         opacity: 0;  transform: scale(1.08) translate(-1%,   1%);   }
+  59%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Alitas-BBQ.png');
+         opacity: 0;  transform: scale(1.00) translate(0%,    0%);   }
+
+  /* ▸ IMAGE 4 — Alitas BBQ */
+  60%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Alitas-BBQ.png');
+         opacity: 1;  transform: scale(1.00) translate(0%,    0%);   }
+  76%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Alitas-BBQ.png');
+         opacity: 1;  transform: scale(1.07) translate(1%,    1.5%); }
+  78%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Alitas-BBQ.png');
+         opacity: 0;  transform: scale(1.07) translate(1%,    1.5%); }
+  79%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Brownie-con-helado.png');
+         opacity: 0;  transform: scale(1.00) translate(0%,    0%);   }
+
+  /* ▸ IMAGE 5 — Brownie con Helado */
+  80%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Brownie-con-helado.png');
+         opacity: 1;  transform: scale(1.00) translate(0%,    0%);   }
+  96%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Brownie-con-helado.png');
+         opacity: 1;  transform: scale(1.08) translate(-1.5%, -1%);  }
+  98%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Brownie-con-helado.png');
+         opacity: 0;  transform: scale(1.08) translate(-1.5%, -1%);  }
+  99%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Pizza-peperoni.png');
+         opacity: 0;  transform: scale(1.00) translate(0%,    0%);   }
+  100% { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Pizza-peperoni.png');
+         opacity: 1;  transform: scale(1.00) translate(0%,    0%);   }
+}
+
+/* ── 9. FILTROS — PILL CHIPS ─────────────────────────────── */
 .filtros {
   display: flex;
-  gap: 0.375rem;
+  gap: 0.5rem;
   overflow-x: auto;
-  padding: 0.5rem 0 1.5rem;
+  padding: 0.25rem 0 1.75rem;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 }
@@ -156,68 +426,108 @@ body {
 
 .filtro-btn {
   flex-shrink: 0;
-  background: rgba(0,0,0,0.03);
-  border: 1px solid rgba(0,0,0,0.06);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
   padding: 0.45rem 1.2rem;
-  border-radius: 20px;
+  border-radius: var(--radius-full);
   cursor: pointer;
   font-size: 0.8125rem;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  color: #6B7280;
-  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  transition: all var(--t-base) var(--ease-smooth);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  letter-spacing: 0.01em;
 }
 
 .filtro-btn:hover {
-  color: #374151;
-  background: rgba(0,0,0,0.05);
-  border-color: rgba(0,0,0,0.1);
+  color: var(--text-primary);
+  background: var(--bg-hover);
+  border-color: var(--border-strong);
+  transform: translateY(-1px);
+}
+
+.filtro-btn:active {
+  transform: scale(0.97);
 }
 
 .filtro-btn.active {
-  background: #111827;
+  background: var(--accent);
   color: #FFFFFF;
-  border-color: #111827;
-  font-weight: 600;
+  border-color: var(--accent);
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
+  font-weight: 700;
 }
 
+/* ── 10. PRODUCTS GRID ───────────────────────────────────── */
 .productos-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, 1fr);
   gap: 1.25rem;
 }
 
+/* ── 11. PRODUCT CARD ────────────────────────────────────── */
 .producto-card {
-  background: #FFFFFF;
-  border-radius: 14px;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
-  border: 1px solid #E5E7EB;
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--t-base) var(--ease-spring), box-shadow var(--t-base) var(--ease-smooth), border-color var(--t-base) var(--ease-smooth);
+  position: relative;
+  will-change: transform;
+}
+
+.producto-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.04) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity var(--t-base) var(--ease-smooth);
+  pointer-events: none;
+  border-radius: inherit;
 }
 
 .producto-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 30px -10px rgba(0,0,0,0.08), 0 4px 8px -4px rgba(0,0,0,0.04);
+  transform: translateY(-5px);
+  border-color: rgba(99, 102, 241, 0.25);
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.1), 0 16px 40px -8px rgba(0, 0, 0, 0.55), 0 8px 16px -4px rgba(0, 0, 0, 0.3);
 }
 
+.producto-card:hover::before {
+  opacity: 1;
+}
+
+/* ── 12. PRODUCT IMAGE ───────────────────────────────────── */
 .prod-img-wrapper {
   position: relative;
   width: 100%;
-  aspect-ratio: 4/3;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
-  background: #F3F4F6;
+  background: var(--bg-elevated);
+}
+
+.prod-img-wrapper::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(to top, rgba(20, 27, 45, 0.7) 0%, transparent 100%);
+  pointer-events: none;
 }
 
 .prod-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform var(--t-slow) var(--ease-spring);
+  display: block;
 }
 
 .producto-card:hover .prod-img {
-  transform: scale(1.04);
+  transform: scale(1.06);
 }
 
 .prod-img-fallback {
@@ -226,111 +536,140 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2.8rem;
-  background: linear-gradient(135deg, #F3F4F6, #E5E7EB);
+  font-size: 3rem;
+  background: linear-gradient(135deg, var(--bg-elevated) 0%, var(--bg-hover) 100%);
 }
 
 .prod-badge {
   position: absolute;
   top: 10px;
   left: 10px;
-  background: rgba(17,24,39,0.8);
+  z-index: 2;
+  background: rgba(99, 102, 241, 0.85);
   color: #FFFFFF;
   padding: 0.2rem 0.65rem;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   font-size: 0.6875rem;
-  font-weight: 600;
-  backdrop-filter: blur(4px);
-  letter-spacing: 0.02em;
+  font-weight: 700;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
+/* ── 13. PRODUCT INFO ────────────────────────────────────── */
 .producto-info {
   padding: 1rem 1rem 1.1rem;
+  position: relative;
+  z-index: 1;
 }
 
 .producto-nombre {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9375rem;
-  font-weight: 600;
-  margin-bottom: 0.75rem;
+  font-weight: 700;
+  margin-bottom: 0.85rem;
   line-height: 1.35;
-  color: #111827;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
 }
 
 .producto-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 0.5rem;
 }
 
 .producto-precio {
   font-size: 1.125rem;
-  font-weight: 700;
-  color: #111827;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -0.02em;
 }
 
+/* ── 14. ADD TO CART BUTTON ──────────────────────────────── */
 .btn-add {
-  background: #111827;
+  background: var(--accent);
   color: #FFFFFF;
   border: none;
-  padding: 0.45rem 1rem;
-  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   font-size: 0.8125rem;
-  font-weight: 600;
-  transition: all 0.15s ease;
-  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  transition: background var(--t-fast) var(--ease-smooth), transform var(--t-fast) var(--ease-smooth), box-shadow var(--t-fast) var(--ease-smooth);
+  font-family: var(--font-body);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
 }
 
 .btn-add:hover {
-  background: #1F2937;
+  background: var(--accent-hover);
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.5);
 }
 
 .btn-add:active {
-  transform: scale(0.97);
+  transform: scale(0.96);
+  box-shadow: none;
 }
 
 .btn-add:disabled {
-  background: #E5E7EB;
-  color: #9CA3AF;
+  background: var(--bg-hover);
+  color: var(--text-muted);
   cursor: default;
   transform: none;
+  box-shadow: none;
+  border: 1px solid var(--border-default);
 }
 
+/* ── 15. CART FAB ────────────────────────────────────────── */
 .cart-fab {
   position: fixed;
-  bottom: 1.5rem;
-  right: 1.5rem;
-  width: 56px;
-  height: 56px;
-  background: #111827;
+  bottom: 1.75rem;
+  right: 1.75rem;
+  width: 60px;
+  height: 60px;
+  background: var(--accent);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.3), var(--shadow-fab), 0 0 32px rgba(99, 102, 241, 0.4);
+  transition: transform var(--t-base) var(--ease-spring), box-shadow var(--t-base) var(--ease-smooth);
   z-index: 99;
   border: none;
+  animation: fabPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes fabPulse {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.3), var(--shadow-fab), 0 0 24px rgba(99, 102, 241, 0.35); }
+  50%       { box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.5), var(--shadow-fab), 0 0 40px rgba(99, 102, 241, 0.55); }
 }
 
 .cart-fab:hover {
-  transform: scale(1.06);
-  box-shadow: 0 8px 28px rgba(0,0,0,0.18);
+  transform: scale(1.08) translateY(-2px);
+  animation-play-state: paused;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.5), 0 16px 48px rgba(0, 0, 0, 0.6), 0 0 48px rgba(99, 102, 241, 0.6);
 }
 
 .cart-fab:active {
-  transform: scale(0.95);
+  transform: scale(0.94);
+  animation-play-state: paused;
 }
 
-.cart-icon { font-size: 1.35rem; color: #FFFFFF; }
+.cart-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+}
 
 .cart-count {
   position: absolute;
-  top: -3px;
-  right: -3px;
-  background: #EF4444;
+  top: -2px;
+  right: -2px;
+  background: var(--danger);
   color: #FFFFFF;
   width: 22px;
   height: 22px;
@@ -340,116 +679,136 @@ body {
   justify-content: center;
   font-size: 0.6875rem;
   font-weight: 700;
-  box-shadow: 0 2px 6px rgba(239,68,68,0.4);
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.5);
+  border: 2px solid var(--bg-base);
 }
 
+/* ── 16. UTILITY: HIDDEN ─────────────────────────────────── */
 .hidden { display: none !important; }
 
+/* ── 17. MODAL — BOTTOM SHEET ────────────────────────────── */
 .modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: flex-end;
   justify-content: center;
   z-index: 200;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  animation: overlayIn var(--t-base) var(--ease-smooth);
+}
+
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 .modal-content {
-  background: #FFFFFF;
-  border-radius: 20px 20px 0 0;
+  background: var(--bg-surface);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  border: 1px solid var(--border-subtle);
+  border-bottom: none;
   width: 100%;
-  max-width: 500px;
-  max-height: 80vh;
+  max-width: 520px;
+  max-height: 82vh;
   overflow-y: auto;
-  padding: 1.5rem;
-  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 -4px 24px rgba(0,0,0,0.06);
+  padding: 1.75rem 1.5rem 2rem;
+  animation: slideUp 0.35s var(--ease-spring);
+  box-shadow: 0 -8px 48px rgba(0, 0, 0, 0.6), 0 -1px 0 var(--border-subtle);
+  position: relative;
 }
 
-.modal-content::-webkit-scrollbar {
-  width: 4px;
-}
-
-.modal-content::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.modal-content::-webkit-scrollbar-thumb {
-  background: #D1D5DB;
-  border-radius: 2px;
+.modal-content::before {
+  content: '';
+  position: absolute;
+  top: 0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 4px;
+  background: var(--border-strong);
+  border-radius: var(--radius-full);
 }
 
 @keyframes slideUp {
   from { transform: translateY(100%); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  to   { transform: translateY(0);    opacity: 1; }
 }
 
+.modal-content::-webkit-scrollbar { width: 4px; }
+.modal-content::-webkit-scrollbar-track { background: transparent; }
+.modal-content::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: var(--radius-full); }
+
+/* ── 18. MODAL HEADER ────────────────────────────────────── */
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
+  padding-top: 0.5rem;
 }
 
 .modal-header h2 {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
   font-size: 1.25rem;
-  font-weight: 700;
-  color: #111827;
-  letter-spacing: -0.02em;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
 }
 
 .close-btn {
-  background: #F3F4F6;
-  border: none;
-  width: 32px;
-  height: 32px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   cursor: pointer;
-  color: #6B7280;
+  color: var(--text-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.15s ease;
+  transition: all var(--t-fast) var(--ease-smooth);
+  font-family: var(--font-body);
 }
 
 .close-btn:hover {
-  background: #E5E7EB;
-  color: #111827;
+  background: var(--bg-hover);
+  border-color: var(--border-default);
+  color: var(--text-primary);
+  transform: scale(1.08);
 }
 
-.cart-items {
-  margin-bottom: 1rem;
-}
+/* ── 19. CART ITEMS LIST ─────────────────────────────────── */
+.cart-items { margin-bottom: 1rem; }
 
 .cart-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.85rem 0;
-  border-bottom: 1px solid #F3F4F6;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--border-subtle);
+  gap: 0.75rem;
 }
 
-.cart-item:last-child {
-  border-bottom: none;
-}
+.cart-item:last-child { border-bottom: none; }
+
+.cart-item-info { flex: 1; min-width: 0; }
 
 .cart-item-name {
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.9375rem;
-  color: #111827;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .cart-item-price {
-  color: #6B7280;
-  font-weight: 600;
+  color: var(--accent);
+  font-weight: 700;
   font-size: 0.875rem;
   margin-top: 0.15rem;
 }
@@ -457,14 +816,15 @@ body {
 .cart-item-qty {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.625rem;
+  flex-shrink: 0;
 }
 
 .cart-item-qty span {
-  color: #111827;
-  font-weight: 600;
+  color: var(--text-primary);
+  font-weight: 700;
   font-size: 0.9375rem;
-  min-width: 1.2rem;
+  min-width: 1.5rem;
   text-align: center;
 }
 
@@ -472,163 +832,243 @@ body {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  border: 1px solid #E5E7EB;
-  background: #FFFFFF;
+  border: 1px solid var(--border-default);
+  background: var(--bg-elevated);
   cursor: pointer;
   font-size: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #374151;
-  transition: all 0.15s ease;
+  color: var(--text-primary);
+  transition: all var(--t-fast) var(--ease-smooth);
+  font-family: var(--font-body);
 }
 
 .qty-btn:hover {
-  background: #F3F4F6;
-  border-color: #D1D5DB;
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #FFFFFF;
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
 }
 
+.qty-btn:active { transform: scale(0.93); }
+
+/* ── 20. CART TOTAL ──────────────────────────────────────── */
 .cart-total {
   display: flex;
   justify-content: space-between;
-  padding: 1rem 0;
-  border-top: 2px solid #111827;
-  font-weight: 700;
+  align-items: center;
+  padding: 1.1rem 0;
+  margin-top: 0.25rem;
+  border-top: 1px solid var(--border-default);
+  font-weight: 800;
   font-size: 1.125rem;
-  color: #111827;
-  margin-top: 0.5rem;
+  color: var(--text-primary);
 }
 
+.cart-total span:last-child {
+  color: var(--accent);
+  font-size: 1.3rem;
+}
+
+/* ── 21. PRIMARY BUTTON ──────────────────────────────────── */
 .btn-primary {
   width: 100%;
-  background: #111827;
+  background: var(--accent);
   color: #FFFFFF;
   border: none;
   padding: 1rem;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.15s ease;
-  font-family: 'Inter', sans-serif;
+  transition: background var(--t-fast) var(--ease-smooth), box-shadow var(--t-fast) var(--ease-smooth), transform var(--t-fast) var(--ease-smooth);
+  font-family: var(--font-body);
   letter-spacing: -0.01em;
+  margin-top: 0.75rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transition: left 0.5s var(--ease-smooth);
 }
 
 .btn-primary:hover {
-  background: #1F2937;
+  background: var(--accent-hover);
+  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.5);
 }
+
+.btn-primary:hover::after { left: 150%; }
 
 .btn-primary:active {
   transform: scale(0.98);
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
 }
 
 .btn-primary:disabled {
-  background: #E5E7EB;
-  color: #9CA3AF;
+  background: var(--bg-hover);
+  color: var(--text-disabled);
   cursor: not-allowed;
   transform: none;
+  box-shadow: none;
+  border: 1px solid var(--border-subtle);
 }
 
+.btn-primary:disabled::after { display: none; }
+
+/* ── 22. EMPTY STATES ────────────────────────────────────── */
 .empty-cart {
   text-align: center;
-  padding: 2.5rem;
-  color: #9CA3AF;
+  padding: 2.5rem 1rem;
+  color: var(--text-muted);
 }
 
 .empty-icon {
-  font-size: 2.5rem;
+  font-size: 2.75rem;
   display: block;
   margin-bottom: 0.75rem;
   opacity: 0.3;
 }
 
+.empty-state {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: var(--text-muted);
+}
+
+.empty-state h3 {
+  font-size: 1.125rem;
+  margin-bottom: 0.35rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.empty-state p { font-size: 0.875rem; }
+
+/* ── 23. KITCHEN / COMANDAS VIEW ─────────────────────────── */
 .section-header {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 1.5rem 0 1rem;
+  padding: 1.75rem 0 1.25rem;
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 1.5rem;
 }
 
 .section-header h2 {
-  font-family: 'Inter', sans-serif;
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: #111827;
-  letter-spacing: -0.02em;
+  font-family: var(--font-body);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
 }
 
 .badge {
-  background: #111827;
-  color: #FFFFFF;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid rgba(99, 102, 241, 0.3);
   padding: 0.15rem 0.65rem;
-  border-radius: 12px;
+  border-radius: var(--radius-full);
   font-size: 0.8125rem;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.01em;
 }
 
-.comandas-list {
-  display: grid;
-  gap: 1rem;
-}
+.comandas-list { display: grid; gap: 1rem; }
 
+/* ── 24. COMANDA CARD — CRM DASHBOARD STYLE ─────────────── */
 .comanda-card {
-  background: #FFFFFF;
-  border-radius: 14px;
-  padding: 1.1rem;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
-  border: 1px solid #E5E7EB;
-  border-left: 4px solid #F59E0B;
-  transition: all 0.2s ease;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  border: 1px solid var(--border-subtle);
+  border-left: 4px solid var(--warning);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--t-base) var(--ease-smooth), box-shadow var(--t-base) var(--ease-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+.comanda-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 120px;
+  height: 100%;
+  background: linear-gradient(to left, rgba(245, 158, 11, 0.04) 0%, transparent 100%);
+  pointer-events: none;
 }
 
 .comanda-card:hover {
-  box-shadow: 0 8px 24px -8px rgba(0,0,0,0.06);
+  transform: translateY(-3px);
+  box-shadow: 0 0 0 1px var(--border-default), 0 12px 32px -8px rgba(0, 0, 0, 0.45);
 }
 
-.comanda-card.status-pendiente { border-left-color: #F59E0B; }
-.comanda-card.status-preparacion { border-left-color: #3B82F6; }
-.comanda-card.status-entregado { border-left-color: #22C55E; opacity: 0.65; }
+.comanda-card.status-pendiente { border-left-color: var(--warning); }
+.comanda-card.status-pendiente::after { background: linear-gradient(to left, rgba(245, 158, 11, 0.06) 0%, transparent 100%); }
+
+.comanda-card.status-preparacion { border-left-color: var(--info); }
+.comanda-card.status-preparacion::after { background: linear-gradient(to left, rgba(59, 130, 246, 0.06) 0%, transparent 100%); }
+
+.comanda-card.status-entregado { border-left-color: var(--success); opacity: 0.6; }
+.comanda-card.status-entregado::after { background: linear-gradient(to left, rgba(16, 185, 129, 0.04) 0%, transparent 100%); }
 
 .comanda-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.625rem;
 }
 
 .comanda-cliente {
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.9375rem;
-  color: #111827;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
 }
 
 .comanda-status {
-  padding: 0.2rem 0.7rem;
-  border-radius: 10px;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
   font-size: 0.6875rem;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .status-pendiente .comanda-status {
-  background: #FEF3C7;
-  color: #B45309;
+  background: var(--warning-soft);
+  color: var(--warning);
+  border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
 .status-preparacion .comanda-status {
-  background: #DBEAFE;
-  color: #1D4ED8;
+  background: var(--info-soft);
+  color: var(--info);
+  border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
 .status-entregado .comanda-status {
-  background: #DCFCE7;
-  color: #15803D;
+  background: var(--success-soft);
+  color: var(--success);
+  border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 .comanda-items {
   font-size: 0.875rem;
-  color: #6B7280;
-  margin-bottom: 0.8rem;
-  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  line-height: 1.65;
 }
 
 .comanda-footer {
@@ -636,83 +1076,223 @@ body {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.625rem;
 }
 
 .comanda-total {
-  font-weight: 700;
+  font-weight: 800;
   font-size: 1rem;
-  color: #111827;
+  color: var(--accent);
+  letter-spacing: -0.01em;
 }
 
 .comanda-time {
   font-size: 0.75rem;
-  color: #9CA3AF;
+  color: var(--text-muted);
+  font-weight: 500;
 }
 
 .btn-status {
-  padding: 0.3rem 0.85rem;
-  border-radius: 8px;
+  padding: 0.35rem 0.9rem;
+  border-radius: var(--radius-sm);
   border: none;
   cursor: pointer;
   font-size: 0.75rem;
-  font-weight: 600;
-  transition: all 0.15s ease;
-  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  transition: all var(--t-fast) var(--ease-smooth);
+  font-family: var(--font-body);
+  letter-spacing: 0.01em;
 }
 
 .btn-avanzar {
-  background: #DBEAFE;
-  color: #1D4ED8;
+  background: var(--info-soft);
+  color: var(--info);
+  border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
 .btn-avanzar:hover {
-  background: #BFDBFE;
+  background: rgba(59, 130, 246, 0.25);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  transform: translateY(-1px);
 }
 
+.btn-avanzar:active { transform: scale(0.96); }
+
 .btn-completar {
-  background: #DCFCE7;
-  color: #15803D;
+  background: var(--success-soft);
+  color: var(--success);
+  border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 .btn-completar:hover {
-  background: #BBF7D0;
+  background: rgba(16, 185, 129, 0.25);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  transform: translateY(-1px);
 }
 
-.empty-state {
-  text-align: center;
-  padding: 3rem 1rem;
-  color: #9CA3AF;
-}
+.btn-completar:active { transform: scale(0.96); }
 
-.empty-state h3 {
-  font-size: 1.125rem;
-  margin-bottom: 0.3rem;
-  font-weight: 600;
-  color: #6B7280;
-}
-
+/* ── 25. LOADING STATE ───────────────────────────────────── */
 .loading {
   text-align: center;
-  padding: 2rem;
-  color: #9CA3AF;
+  padding: 2.5rem 1rem;
+  color: var(--text-muted);
   font-size: 0.875rem;
+  font-weight: 500;
 }
 
-@media (max-width: 480px) {
+/* ── 25b. APP FOOTER ────────────────────────────────────── */
+.app-footer {
+  text-align: center;
+  padding: 2rem 1rem 4rem 1rem;
+  width: 100%;
+}
+
+.footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  color: #60A5FA;
+  padding: 0.45rem 1rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-decoration: none;
+  font-family: var(--font-body);
+  transition: all var(--t-fast) var(--ease-smooth);
+}
+
+.footer-link:hover {
+  background: rgba(59, 130, 246, 0.3);
+  border-color: #3B82F6;
+  color: #FFFFFF;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.footer-link:active {
+  transform: translateY(0);
+}
+
+/* ── 26. RESPONSIVE — MOBILE ─────────────────────────────── */
+@media (max-width: 640px) {
+  main { padding: 0 1rem; }
+
   .productos-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.875rem;
   }
 
-  .hero-content h1 {
-    font-size: 2rem;
+  .hero-section { height: 320px; border-radius: var(--radius-lg); }
+  .hero-content { padding: 0 1.25rem 1.5rem; }
+  .hero-content h1 { font-size: 2.25rem; }
+  .hero-badge { top: 1rem; left: 1rem; }
+  .hero-logo  { top: 1rem; right: 1rem; width: 44px; height: 44px; }
+  .top-nav { padding: 0.625rem 1rem; }
+  .nav-inner { max-width: 100%; }
+
+  .modal-content {
+    padding: 1.5rem 1.25rem 1.75rem;
+    border-radius: 20px 20px 0 0;
   }
 
-  .hero-section {
-    padding: 2rem 0 1rem;
-  }
+  .cart-fab { bottom: 1.25rem; right: 1.25rem; width: 56px; height: 56px; }
+  .btn-add { padding: 0.45rem 0.75rem; font-size: 0.75rem; }
+  .producto-nombre { font-size: 0.875rem; }
+  .producto-precio { font-size: 1rem; }
+}
 
-  .top-nav {
-    padding: 0.5rem 0.75rem;
-  }
+@media (max-width: 420px) {
+  .productos-grid { grid-template-columns: 1fr; }
+  .hero-section { height: 280px; }
+  .hero-content h1 { font-size: 1.875rem; }
+  .hero-badge { font-size: 0.6875rem; }
+}
+
+/* ── 27. SELECTION & FOCUS ───────────────────────────────── */
+::selection {
+  background: var(--accent-soft);
+  color: var(--text-primary);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ══════════════════════════════════════════════════════
+   KEYFRAMES: FOOD SLIDESHOW WITH KEN BURNS (CONTINUED)
+   ══════════════════════════════════════════════════════ */
+@keyframes heroSlideshow {
+  0%   { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Pizza-peperoni.png');
+         opacity: 1;  transform: scale(1.00) translate(0%,    0%);   }
+  16%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Pizza-peperoni.png');
+         opacity: 1;  transform: scale(1.08) translate(-1.5%, -0.5%); }
+  18%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Pizza-peperoni.png');
+         opacity: 0;  transform: scale(1.08) translate(-1.5%, -0.5%); }
+  19%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Tacos-al-pastor.png');
+         opacity: 0;  transform: scale(1.00) translate(0%,    0%);   }
+  20%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Tacos-al-pastor.png');
+         opacity: 1;  transform: scale(1.00) translate(0%,    0%);   }
+  36%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Tacos-al-pastor.png');
+         opacity: 1;  transform: scale(1.07) translate(1.5%,  -1%);  }
+  38%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Tacos-al-pastor.png');
+         opacity: 0;  transform: scale(1.07) translate(1.5%,  -1%);  }
+  39%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Hamburguesa-clasica.png');
+         opacity: 0;  transform: scale(1.00) translate(0%,    0%);   }
+  40%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Hamburguesa-clasica.png');
+         opacity: 1;  transform: scale(1.00) translate(0%,    0%);   }
+  56%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Hamburguesa-clasica.png');
+         opacity: 1;  transform: scale(1.08) translate(-1%,   1%);   }
+  58%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Hamburguesa-clasica.png');
+         opacity: 0;  transform: scale(1.08) translate(-1%,   1%);   }
+  59%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Alitas-BBQ.png');
+         opacity: 0;  transform: scale(1.00) translate(0%,    0%);   }
+  60%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Alitas-BBQ.png');
+         opacity: 1;  transform: scale(1.00) translate(0%,    0%);   }
+  76%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Alitas-BBQ.png');
+         opacity: 1;  transform: scale(1.07) translate(1%,    1.5%); }
+  78%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Alitas-BBQ.png');
+         opacity: 0;  transform: scale(1.07) translate(1%,    1.5%); }
+  79%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Brownie-con-helado.png');
+         opacity: 0;  transform: scale(1.00) translate(0%,    0%);   }
+  80%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Brownie-con-helado.png');
+         opacity: 1;  transform: scale(1.00) translate(0%,    0%);   }
+  96%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Brownie-con-helado.png');
+         opacity: 1;  transform: scale(1.08) translate(-1.5%, -1%);  }
+  98%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Brownie-con-helado.png');
+         opacity: 0;  transform: scale(1.08) translate(-1.5%, -1%);  }
+  99%  { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Pizza-peperoni.png');
+         opacity: 0;  transform: scale(1.00) translate(0%,    0%);   }
+  100% { background-image: url('https://beeral.com.mx/wp-content/uploads/2026/07/Pizza-peperoni.png');
+         opacity: 1;  transform: scale(1.00) translate(0%,    0%);   }
+}
+
+@keyframes heroDots {
+  0%,  19% { background: var(--accent);
+              box-shadow: 14px 0 0 rgba(99,102,241,0.35), 28px 0 0 rgba(99,102,241,0.2),
+                          42px 0 0 rgba(99,102,241,0.12), 56px 0 0 rgba(99,102,241,0.08); }
+  20%, 39% { background: rgba(99,102,241,0.3);
+              box-shadow: 14px 0 0 var(--accent), 28px 0 0 rgba(99,102,241,0.35),
+                          42px 0 0 rgba(99,102,241,0.2), 56px 0 0 rgba(99,102,241,0.12); }
+  40%, 59% { background: rgba(99,102,241,0.15);
+              box-shadow: 14px 0 0 rgba(99,102,241,0.3), 28px 0 0 var(--accent),
+                          42px 0 0 rgba(99,102,241,0.35), 56px 0 0 rgba(99,102,241,0.2); }
+  60%, 79% { background: rgba(99,102,241,0.1);
+              box-shadow: 14px 0 0 rgba(99,102,241,0.15), 28px 0 0 rgba(99,102,241,0.3),
+                          42px 0 0 var(--accent), 56px 0 0 rgba(99,102,241,0.35); }
+  80%, 99% { background: rgba(99,102,241,0.08);
+              box-shadow: 14px 0 0 rgba(99,102,241,0.1), 28px 0 0 rgba(99,102,241,0.15),
+                          42px 0 0 rgba(99,102,241,0.3), 56px 0 0 var(--accent); }
+  100%     { background: var(--accent);
+              box-shadow: 14px 0 0 rgba(99,102,241,0.35), 28px 0 0 rgba(99,102,241,0.2),
+                          42px 0 0 rgba(99,102,241,0.12), 56px 0 0 rgba(99,102,241,0.08); }
 }
