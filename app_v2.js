@@ -15,7 +15,6 @@ const IMAGES = {
   'Brownie con helado': 'https://beeral.com.mx/wp-content/uploads/2026/07/Brownie-con-helado.png'
 };
 
-// Menú local de fallback/rápido (se puede cargar desde n8n si lo deseas)
 const MENU_LOCAL = [
   { id: 1, Nombre: 'Tacos al pastor', Precio: 25, Categoria: { value: 'Platillos' } },
   { id: 2, Nombre: 'Pizza peperoni', Precio: 150, Categoria: { value: 'Platillos' } },
@@ -32,7 +31,6 @@ let state = {
   telefono: ''
 };
 
-// 1. Obtener parámetros de WhatsApp desde la URL (?phone=521234567890&wa_id=xxx)
 function getUrlParams() {
   const params = new URLSearchParams(window.location.search);
   state.wa_id = params.get('wa_id') || 'demo_wa';
@@ -82,58 +80,28 @@ function renderProductos() {
   });
 }
 
-// 2. Agregar al Carrito (Envía el evento a n8n)
-async function addToCart(id, btnElement) {
+// 2. Agregar al Carrito (INSTANTÁNEO Y LOCAL: Ya no satura con peticiones innecesarias)
+function addToCart(id, btnElement) {
   const prod = state.productos.find(p => p.id === id);
   if (!prod) return;
 
-  // Animación / Feedback visual en botón
-  const originalText = btnElement.textContent;
-  btnElement.disabled = true;
-  btnElement.textContent = '⏳ Guardando...';
-
-  const payload = {
-    telefono: state.telefono,
-    wa_id: state.wa_id,
-    producto: prod.Nombre,
-    cantidad: 1,
-    precio_unitario: parseInt(prod.Precio) || 0,
-    notas: 'Agregado desde Menú Web'
-  };
-
-  try {
-    // Petición a n8n
-    const res = await fetch(`${N8N_BASE_URL}/agregar-carrito`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+  const existe = state.carrito.find(c => c.id === id);
+  if (existe) {
+    existe.cantidad += 1;
+  } else {
+    state.carrito.push({ 
+      id: prod.id, 
+      nombre: prod.Nombre, 
+      precio: parseInt(prod.Precio) || 0, 
+      cantidad: 1 
     });
-
-    const data = await res.json();
-
-    if (data.status === 'success' || res.ok) {
-      // Actualizar estado local
-      const existe = state.carrito.find(c => c.id === id);
-      if (existe) {
-        existe.cantidad += 1;
-      } else {
-        state.carrito.push({ id: prod.id, nombre: prod.Nombre, precio: parseInt(prod.Precio) || 0, cantidad: 1 });
-      }
-      updateCartUI();
-      btnElement.textContent = '✓ Agregado';
-      setTimeout(() => {
-        btnElement.disabled = false;
-        renderProductos();
-      }, 1000);
-    } else {
-      throw new Error('No se pudo guardar');
-    }
-  } catch (error) {
-    console.error('Error al enviar a n8n:', error);
-    alert('⚠️ Error de conexión. Inténtalo de nuevo.');
-    btnElement.textContent = originalText;
-    btnElement.disabled = false;
   }
+
+  updateCartUI();
+  btnElement.textContent = '✓ Agregado';
+  setTimeout(() => {
+    renderProductos();
+  }, 800);
 }
 
 function removeFromCart(id) {
@@ -216,7 +184,7 @@ function closeCart() {
   if (modal) modal.classList.add('hidden');
 }
 
-// 3. Confirmar Pedido Final (Dispara Webhook de Finalizar en n8n)
+// 3. Confirmar Pedido Final (Envía TODO el pedido consolidado a n8n)
 async function confirmOrder() {
   if (state.carrito.length === 0) return;
   const btn = document.getElementById('confirm-order');
@@ -227,11 +195,17 @@ async function confirmOrder() {
     wa_id: state.wa_id,
     telefono: state.telefono,
     total: getTotal(),
-    items: state.carrito
+    items: state.carrito.map(item => ({
+      producto: item.nombre,
+      cantidad: item.cantidad,
+      precio_unitario: item.precio,
+      notas: 'Agregado desde Menú Web'
+    }))
   };
 
   try {
     const res = await fetch(`${N8N_BASE_URL}/finalizar-pedido`, {
+      method: 'POST',
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -241,6 +215,7 @@ async function confirmOrder() {
       state.carrito = [];
       updateCartUI();
       closeCart();
+      renderProductos();
       alert('🎉 ¡Pedido recibido! Te enviaremos la confirmación por WhatsApp.');
     } else {
       throw new Error('Error al procesar pedido');
