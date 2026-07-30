@@ -1,5 +1,5 @@
 // Configuración de n8n (Webhooks)
-const N8N_BASE_URL = 'https://brl-labs-n8n.oiwlwu.easypanel.host/webhook';
+const N8N_BASE_URL = 'https://brl-labs-n8n.oiwlwu.easypanel.host/webhook/agregar-carrito';
 
 // Mapeo de imágenes para el menú
 const IMAGES = {
